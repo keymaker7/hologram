@@ -202,5 +202,5 @@ applySize(sizeRange.value);
 speedValue.textContent = effectSpeed.toFixed(1);
 onValue.textContent = onDuration.toFixed(1);
 offValue.textContent = offDuration.toFixed(1);
-applyImage("./samples/cute-cat.png");
+applyImage("./samples/neon-bot-a.png");
 requestAnimationFrame(animate);
