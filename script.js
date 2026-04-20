@@ -4,6 +4,7 @@ const sizeValue = document.getElementById("sizeValue");
 const effectSelect = document.getElementById("effectSelect");
 const speedRange = document.getElementById("speedRange");
 const speedValue = document.getElementById("speedValue");
+const uploadMessage = document.getElementById("uploadMessage");
 const hologramCanvas = document.getElementById("hologramCanvas");
 const sampleButtons = document.querySelectorAll(".sample-btn");
 
@@ -17,6 +18,7 @@ const arms = [
 let currentEffect = "float";
 let effectSpeed = Number(speedRange.value);
 let activeObjectUrl = null;
+const maxUploadBytes = 10 * 1024 * 1024;
 
 function applySize(size) {
   hologramCanvas.style.setProperty("--img-size", `${size}px`);
@@ -36,12 +38,23 @@ imageInput.addEventListener("change", (event) => {
     return;
   }
 
+  if (!file.type.startsWith("image/")) {
+    uploadMessage.textContent = "이미지 파일만 업로드할 수 있어요.";
+    return;
+  }
+
+  if (file.size > maxUploadBytes) {
+    uploadMessage.textContent = "파일이 너무 커요. 10MB 이하 이미지를 사용해 주세요.";
+    return;
+  }
+
   if (activeObjectUrl) {
     URL.revokeObjectURL(activeObjectUrl);
   }
 
   const url = URL.createObjectURL(file);
   activeObjectUrl = url;
+  uploadMessage.textContent = "";
   applyImage(url);
 });
 

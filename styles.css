@@ -51,6 +51,13 @@ h1 {
   width: 100%;
 }
 
+.upload-message {
+  margin: -4px 0 0;
+  min-height: 18px;
+  color: #ffb7b7;
+  font-size: 0.9rem;
+}
+
 .sample-control {
   display: grid;
   gap: 8px;

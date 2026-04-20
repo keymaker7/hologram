@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
     <title>홀로그램 4면 생성기</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -19,6 +24,7 @@
           <span>이미지 업로드</span>
           <input id="imageInput" type="file" accept="image/*" />
         </label>
+        <p id="uploadMessage" class="upload-message" aria-live="polite"></p>
 
         <div class="sample-control">
           <span>샘플 빠른 테스트</span>
