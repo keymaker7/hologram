@@ -1,5 +1,6 @@
 :root {
   color-scheme: dark;
+  --ui-font-size: 18px;
 }
 
 * {
@@ -9,6 +10,7 @@
 body {
   margin: 0;
   font-family: "Segoe UI", "Noto Sans KR", sans-serif;
+  font-size: var(--ui-font-size);
   background: #050505;
   color: #f5f5f5;
 }
@@ -21,34 +23,43 @@ body {
 
 h1 {
   margin: 0 0 8px;
-  font-size: 1.9rem;
+  font-size: clamp(1.9rem, 4.8vw, 2.5rem);
+  letter-spacing: -0.02em;
 }
 
 .desc {
   margin: 0 0 18px;
   color: #cfd3dc;
   line-height: 1.5;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
 }
 
 .controls {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 20px;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid #2a2a2a;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #101013;
 }
 
 .file-input {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
   align-items: center;
 }
 
+.file-input span {
+  font-weight: 600;
+  min-width: 100px;
+}
+
 .file-input input {
-  width: 100%;
+  flex: 1;
+  min-width: 240px;
 }
 
 .upload-message {
@@ -63,6 +74,15 @@ h1 {
   gap: 8px;
 }
 
+.sample-control > span,
+.size-control > span,
+.effect-control > span,
+.speed-control > span,
+.visibility-control > span,
+.timing-control > span {
+  font-weight: 600;
+}
+
 .sample-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -74,8 +94,9 @@ h1 {
   background: #1c1f26;
   color: #f5f5f5;
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   cursor: pointer;
+  font-size: 0.95rem;
 }
 
 .sample-btn:hover {
@@ -92,22 +113,28 @@ h1 {
 }
 
 .effect-control,
-.speed-control {
+.speed-control,
+.visibility-control,
+.timing-control {
   display: grid;
   gap: 8px;
 }
 
 .effect-control select,
-.speed-control input {
+.speed-control input,
+.visibility-control select,
+.timing-control input {
   width: 100%;
 }
 
-.effect-control select {
+.effect-control select,
+.visibility-control select {
   border: 1px solid #3b3f46;
   background: #1c1f26;
   color: #f5f5f5;
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: 10px 12px;
+  font-size: 0.98rem;
 }
 
 .canvas-wrap {
@@ -204,4 +231,18 @@ h1 {
   border-radius: 10px;
   border: 1px solid #23252c;
   background: #000;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --ui-font-size: 16px;
+  }
+
+  .app {
+    padding: 16px 12px 30px;
+  }
+
+  .file-input input {
+    min-width: 180px;
+  }
 }

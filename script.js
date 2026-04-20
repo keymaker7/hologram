@@ -4,6 +4,11 @@ const sizeValue = document.getElementById("sizeValue");
 const effectSelect = document.getElementById("effectSelect");
 const speedRange = document.getElementById("speedRange");
 const speedValue = document.getElementById("speedValue");
+const visibilitySelect = document.getElementById("visibilitySelect");
+const onRange = document.getElementById("onRange");
+const offRange = document.getElementById("offRange");
+const onValue = document.getElementById("onValue");
+const offValue = document.getElementById("offValue");
 const uploadMessage = document.getElementById("uploadMessage");
 const hologramCanvas = document.getElementById("hologramCanvas");
 const sampleButtons = document.querySelectorAll(".sample-btn");
@@ -17,6 +22,9 @@ const arms = [
 
 let currentEffect = "float";
 let effectSpeed = Number(speedRange.value);
+let visibilityMode = "always";
+let onDuration = Number(onRange.value);
+let offDuration = Number(offRange.value);
 let activeObjectUrl = null;
 const maxUploadBytes = 10 * 1024 * 1024;
 
@@ -71,6 +79,20 @@ speedRange.addEventListener("input", (event) => {
   speedValue.textContent = effectSpeed.toFixed(1);
 });
 
+visibilitySelect.addEventListener("change", (event) => {
+  visibilityMode = event.target.value;
+});
+
+onRange.addEventListener("input", (event) => {
+  onDuration = Number(event.target.value);
+  onValue.textContent = onDuration.toFixed(1);
+});
+
+offRange.addEventListener("input", (event) => {
+  offDuration = Number(event.target.value);
+  offValue.textContent = offDuration.toFixed(1);
+});
+
 sampleButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const src = button.dataset.src;
@@ -81,6 +103,32 @@ sampleButtons.forEach((button) => {
     applyImage(src);
   });
 });
+
+function getVisibilityAlpha(t, index) {
+  if (visibilityMode === "always") {
+    return 1;
+  }
+
+  if (visibilityMode === "blink") {
+    const cycle = onDuration + offDuration;
+    const phase = t % cycle;
+    return phase < onDuration ? 1 : 0.08;
+  }
+
+  if (visibilityMode === "sequential") {
+    const slot = Math.max(0.12, onDuration);
+    const phase = (t % (slot * arms.length)) / slot;
+    return Math.floor(phase) === index ? 1 : 0.05;
+  }
+
+  if (visibilityMode === "random") {
+    const seed = Math.sin(t * 9.5 + index * 13.37) * 43758.5453;
+    const normalized = seed - Math.floor(seed);
+    return normalized > 0.32 ? 1 : 0.12;
+  }
+
+  return 1;
+}
 
 function animate(ts) {
   const t = (ts / 1000) * effectSpeed;
@@ -119,7 +167,25 @@ function animate(ts) {
       twist = Math.sin(t * 7 + index) * 2.4;
       dy = Math.sin(t * 2 + index) * 3;
       glow = 7 + flick * 10;
+    } else if (currentEffect === "vortex") {
+      const swirl = t * 2.2 + index * 1.7;
+      dx = Math.cos(swirl) * 12;
+      dy = Math.sin(swirl * 1.2) * 12;
+      scale = 1 + Math.sin(t * 2.4 + index) * 0.09;
+      twist = Math.sin(swirl) * 8;
+      glow = 11;
+    } else if (currentEffect === "glitch") {
+      const pulse = Math.sin(t * 10 + index * 2.2);
+      const jump = pulse > 0.82 ? 16 : 0;
+      dx = Math.sin(t * 3 + index) * 4 + jump;
+      dy = Math.cos(t * 3.6 + index) * 4 - jump * 0.4;
+      twist = pulse > 0.82 ? 10 : Math.sin(t * 4 + index) * 2;
+      scale = 1 + (pulse > 0.82 ? 0.12 : 0.02);
+      glow = pulse > 0.82 ? 16 : 9;
     }
+
+    const visibilityAlpha = getVisibilityAlpha(t, index);
+    opacity *= visibilityAlpha;
 
     arm.style.setProperty("--dx", `${dx.toFixed(2)}px`);
     arm.style.setProperty("--dy", `${dy.toFixed(2)}px`);
@@ -134,5 +200,7 @@ function animate(ts) {
 
 applySize(sizeRange.value);
 speedValue.textContent = effectSpeed.toFixed(1);
+onValue.textContent = onDuration.toFixed(1);
+offValue.textContent = offDuration.toFixed(1);
 applyImage("./samples/cute-cat.png");
 requestAnimationFrame(animate);

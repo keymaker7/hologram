@@ -49,12 +49,34 @@
             <option value="pulse">맥박 확대 (Pulse)</option>
             <option value="wave">순차 웨이브 (Wave)</option>
             <option value="flicker">홀로그램 깜빡임 (Flicker)</option>
+            <option value="vortex">소용돌이 (Vortex)</option>
+            <option value="glitch">글리치 점프 (Glitch)</option>
           </select>
         </label>
 
         <label class="speed-control">
           <span>효과 속도: <strong id="speedValue">1.0</strong>x</span>
           <input id="speedRange" type="range" min="0.4" max="2.4" value="1.0" step="0.1" />
+        </label>
+
+        <label class="visibility-control">
+          <span>표시 모드</span>
+          <select id="visibilitySelect">
+            <option value="always" selected>항상 표시</option>
+            <option value="blink">주기 점멸 (ON/OFF)</option>
+            <option value="sequential">순차 표시 (북→동→남→서)</option>
+            <option value="random">랜덤 깜빡임</option>
+          </select>
+        </label>
+
+        <label class="timing-control">
+          <span>보임 시간: <strong id="onValue">1.0</strong>초</span>
+          <input id="onRange" type="range" min="0.2" max="3.0" value="1.0" step="0.1" />
+        </label>
+
+        <label class="timing-control">
+          <span>숨김 시간: <strong id="offValue">0.6</strong>초</span>
+          <input id="offRange" type="range" min="0.1" max="3.0" value="0.6" step="0.1" />
         </label>
       </section>
 
